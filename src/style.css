@@ -1,11 +1,21 @@
 body {
 	background-image: url("./img/fon.png");
+  background-attachment: fixed;
+  background-size: cover;
+  color: #ffffff;
 }
 
+span {
+  font-weight: bold;
+}
+p {
+  font-weight: bold;
+}
+.into {
+  display: flex;
+}
 .container {
-	display: flex;
 	justify-content: center;
-	flex-wrap: wrap;
 }
 .coin-name {
 	text-align: center;
@@ -81,3 +91,23 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+
+#ETH {
+  background-color: #2d4934;
+  margin: 15px;
+}
+
+#LTC {
+  background-color: #4c4c4b;
+  margin: 15px;
+}
+
+#BTC {
+  background-color: #351505;
+  margin: 15px;
+}
+
+
+
+

@@ -35,7 +35,7 @@ document.querySelector("#LTC .switch input").onclick = change_format;
 document.querySelector("#BTC .switch input").onclick = change_format;
 document.querySelector(".currency select").onchange = change_currency;
 
-update_stats();
+// update_stats();
 
 function change_format(e) {
 	let coinName = e.target.name;
@@ -90,10 +90,10 @@ function update_change(container, val, changesPercent, currency) {
 	val = Math.round(val);
 
 	if (val < 0) {
-		container.style.color = "red";
+		container.style.color = "#bf0e22";
 	} else {
 		val = '+' + val;
-		container.style.color = "green"
+		container.style.color = "#70c446"
 	}
 
 	val += changesPercent ? '%' : get_currency_code(currency);

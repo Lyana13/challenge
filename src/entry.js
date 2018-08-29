@@ -35,7 +35,7 @@ document.querySelector("#LTC .switch input").onclick = change_format;
 document.querySelector("#BTC .switch input").onclick = change_format;
 document.querySelector(".currency select").onchange = change_currency;
 
-// update_stats();
+update_stats();
 
 function change_format(e) {
 	let coinName = e.target.name;

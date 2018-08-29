@@ -11,12 +11,31 @@ span {
 p {
   font-weight: bold;
 }
-.into {
-  display: flex;
-}
+
 .container {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
 	justify-content: center;
+	max-width: 1000px;
+	margin: auto;
 }
+
+.container > div {
+	width: 250px;
+	text-align: center;
+	padding: 20px;
+}
+
+.container > div img {
+	height: 200px;
+	width:250px;
+}
+
+.container .changes p, .container .price {
+	text-align: left;
+}
+
 .coin-name {
 	text-align: center;
 }
@@ -32,6 +51,9 @@ p {
 .currency {
 	font-size: 24px;
 	color: white;
+	max-width: 1000px;
+	margin: auto;
+	text-align: center;
 }
 
 /* SWITCHER https://www.w3schools.com/howto/howto_css_switch.asp */

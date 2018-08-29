@@ -5,12 +5,27 @@
 	<title>Challenge</title>
 	</head>
 	<body>
+		<div class='currency'>
+			Select currency to exchange:
+			<select name="cars">
+				<option value="USD">USD</option>
+				<option value="EUR">EUR</option>
+				<option value="RUB">RUB</option>
+				<option value="GBP">GBP</option>
+			</select>
+		</div>
 		<div class="container">
 			<div id="ETH">
 				<p class="coin-name">Ethereum</p>
 				<img src="<%=require('./img/eth.png')%>">
 				<p class="price">Price: <span></span></p>
 				<div class="changes">
+					<p>Percent change
+						<label class="switch">
+							<input type="checkbox" name="ETH">
+							<span class="slider round"></span>
+						</label>
+					</p>
 					<p class="hour">Hour change <span></span></p>
 					<p class="day">Day change <span></span></p>
 					<p class="week">Week change <span></span></p>
@@ -22,6 +37,12 @@
 				<img src="<%=require('./img/ltc.png')%>">
 				<p class="price">Price: <span></span></p>
 				<div class="changes">
+					<p>Percent change
+						<label class="switch">
+							<input type="checkbox" name="LTC">
+							<span class="slider round"></span>
+						</label>
+					</p>
 					<p class="hour">Hour change <span></span></p>
 					<p class="day">Day change <span></span></p>
 					<p class="week">Week change <span></span></p>
@@ -31,8 +52,14 @@
 			<div id="BTC">
 				<p class="coin-name">Bitcoin</p>
 				<img src="<%=require('./img/btc.png')%>">
-				<p class="price">Price: <span></span></p>
+				<p class="price">Price <span></span></p>
 				<div class="changes">
+					<p>Percent change
+						<label class="switch">
+							<input type="checkbox" name="BTC">
+							<span class="slider round"></span>
+						</label>
+					</p>
 					<p class="hour">Hour change <span></span></p>
 					<p class="day">Day change <span></span></p>
 					<p class="week">Week change <span></span></p>

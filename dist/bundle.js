@@ -99,7 +99,7 @@ exports = module.exports = __webpack_require__(/*! ../node_modules/css-loader/li
 
 
 // module
-exports.push([module.i, "body {\n\tbackground-image: url(" + escape(__webpack_require__(/*! ./img/fon.png */ "./src/img/fon.png")) + ");\n}\n\n.container {\n\tdisplay: flex;\n\tjustify-content: center;\n\tflex-wrap: wrap;\n\tbackground-color: green;\n}\n.coin-name {\n\ttext-align: center;\n}", ""]);
+exports.push([module.i, "body {\n\tbackground-image: url(" + escape(__webpack_require__(/*! ./img/fon.png */ "./src/img/fon.png")) + ");\n}\n\n.container {\n\tdisplay: flex;\n\tjustify-content: center;\n\tflex-wrap: wrap;\n}\n.coin-name {\n\ttext-align: center;\n}\n\n.changes span, .changes label, .price span {\n\tfloat: right;\n}\n\n.price span {\n\tcolor: white;\n}\n\n.currency {\n\tfont-size: 24px;\n\tcolor: white;\n}\n\n/* SWITCHER https://www.w3schools.com/howto/howto_css_switch.asp */\n\n.switch {\n  position: relative;\n  display: inline-block;\n  width: 60px;\n  height: 34px;\n}\n\n.switch input {display:none;}\n\n.slider {\n  position: absolute;\n  cursor: pointer;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background-color: #ccc;\n  -webkit-transition: .4s;\n  transition: .4s;\n}\n\n.slider:before {\n  position: absolute;\n  content: \"\";\n  height: 26px;\n  width: 26px;\n  left: 4px;\n  bottom: 4px;\n  background-color: white;\n  -webkit-transition: .4s;\n  transition: .4s;\n}\n\ninput:checked + .slider {\n  background-color: #2196F3;\n}\n\ninput:focus + .slider {\n  box-shadow: 0 0 1px #2196F3;\n}\n\ninput:checked + .slider:before {\n  -webkit-transform: translateX(26px);\n  -ms-transform: translateX(26px);\n  transform: translateX(26px);\n}\n\n/* Rounded sliders */\n.slider.round {\n  border-radius: 34px;\n}\n\n.slider.round:before {\n  border-radius: 50%;\n}\n", ""]);
 
 // exports
 
@@ -740,66 +740,116 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_style_css__WEBPACK_IMPORTED_MODULE_0__);
 
 
-var coins = [
-	 {name: "ETH",
-	  changesPercent: false,
-	  price: document.querySelector("#ETH .price span"),
-	  hour:  document.querySelector("#ETH .changes .hour span"),
-	  day:   document.querySelector("#ETH .changes .day span"),
-	  week:  document.querySelector("#ETH .changes .week span"),
-	  month: document.querySelector("#ETH .changes .month span")},
-	 {name: "LTC",
-	  changesPercent: false,
-	  price: document.querySelector("#LTC .price span"),
-	  hour:  document.querySelector("#LTC .changes .hour span"),
-	  day:   document.querySelector("#LTC .changes .day span"),
-	  week:  document.querySelector("#LTC .changes .week span"),
-	  month: document.querySelector("#LTC .changes .month span")},
-	 {name: "BTC",
-	  changesPercent: false,
-	  price: document.querySelector("#BTC .price span"),
-	  hour:  document.querySelector("#BTC .changes .hour span"),
-	  day:   document.querySelector("#BTC .changes .day span"),
-	  week:  document.querySelector("#BTC .changes .week span"),
-	  month: document.querySelector("#BTC .changes .month span")}
-];
-var initCurrency = "USD";
+var COINS =
+	{"ETH": {
+		changesPercent: false,
+		changes: {},
+		price: document.querySelector("#ETH .price span"),
+		hour:  document.querySelector("#ETH .changes .hour span"),
+		day:   document.querySelector("#ETH .changes .day span"),
+		week:  document.querySelector("#ETH .changes .week span"),
+		month: document.querySelector("#ETH .changes .month span")},
+	 "LTC": {
+		changesPercent: false,
+		changes: {},
+		price: document.querySelector("#LTC .price span"),
+		hour:  document.querySelector("#LTC .changes .hour span"),
+		day:   document.querySelector("#LTC .changes .day span"),
+		week:  document.querySelector("#LTC .changes .week span"),
+		month: document.querySelector("#LTC .changes .month span")},
+	 "BTC" : {
+		changesPercent: false,
+		changes: {},
+		price: document.querySelector("#BTC .price span"),
+		hour:  document.querySelector("#BTC .changes .hour span"),
+		day:   document.querySelector("#BTC .changes .day span"),
+		week:  document.querySelector("#BTC .changes .week span"),
+		month: document.querySelector("#BTC .changes .month span")}
+	};
 
-const baseUrl = "https://apiv2.bitcoinaverage.com/indices/global/ticker/"; 
+var CURRENCY = "USD";
 
 
-function get(coin, currency) {
-	let url = baseUrl + coin.name + currency;
+document.querySelector("#ETH .switch input").onclick = change_format;
+document.querySelector("#LTC .switch input").onclick = change_format;
+document.querySelector("#BTC .switch input").onclick = change_format;
+document.querySelector(".currency select").onchange = change_currency;
+
+update_stats();
+
+function change_format(e) {
+	let coinName = e.target.name;
+	let status = e.target.checked;
+	let coinConf = COINS[coinName];
+	coinConf.changesPercent = status;
+	update_changes(coinConf, CURRENCY);
+}
+
+function change_currency(e) {
+	CURRENCY = e.target.options[e.target.selectedIndex].value;
+	update_stats();
+}
+
+function update_stats() {
+	for (var coinName in COINS)
+	{
+		update_stat(coinName, COINS[coinName], CURRENCY)
+	}
+}
+
+
+
+function update_stat(coinName, coinConf, currency) {
+	let url = "https://apiv2.bitcoinaverage.com/indices/global/ticker/" + coinName + currency;
 	let oReq = new XMLHttpRequest();
 	oReq.open("GET", url, true);
 	oReq.onreadystatechange = () => {
 		if (oReq.readyState == 4 && oReq.status == 200) {
 			let obj = JSON.parse(oReq.responseText);
-			let changes = coin.changesPercent ? obj.changes.percent : obj.changes.price;
-			coin.price.innerHTML = obj.bid + suffix(coin.changesPercent, currency);
-			coin.hour.innerHTML = changes.hour + suffix(coin.changesPercent, currency);
-			coin.day.innerHTML = changes.day + suffix(coin.changesPercent, currency);
-			coin.week.innerHTML = changes.week + suffix(coin.changesPercent, currency);
-			coin.month.innerHTML = changes.month + suffix(coin.changesPercent, currency);
+			update_price(coinConf, obj.bid, currency);
+			coinConf.changes = obj.changes;
+			update_changes(coinConf, currency);
 		}
 	}
 	oReq.send();
 };
 
-function suffix(changesPercent, currency) {
-	if (changesPercent)
-		return '%';
-	else if (currency === "USD")
-		return '&#36';
-	else if (currency === "EUR")
-		return '&#8364';
-	else if (currency === "RUB")
-		return '&#8381';
-	else if (currency === "GBP")
-		return '&#163';
+function update_price(coin, price, currency) {
+	coin.price.innerHTML = get_currency_code(currency) + price.toFixed(2);
 }
 
-coins.forEach(coin => get(coin, initCurrency));
+function update_changes(coin, currency) {
+	let changes = coin.changesPercent ? coin.changes.percent : coin.changes.price;
+	update_change(coin.hour, changes.hour, coin.changesPercent, currency);
+	update_change(coin.day, changes.day, coin.changesPercent, currency);
+	update_change(coin.week, changes.week, coin.changesPercent, currency);
+	update_change(coin.month, changes.month, coin.changesPercent, currency);
+}
+
+function update_change(container, val, changesPercent, currency) {
+	val = Math.round(val);
+
+	if (val < 0) {
+		container.style.color = "red";
+	} else {
+		val = '+' + val;
+		container.style.color = "green"
+	}
+
+	val += changesPercent ? '%' : get_currency_code(currency);
+	container.innerHTML = val;
+}
+
+function get_currency_code(currency) {
+	if (currency === "USD")
+		return '&#36;';
+	else if (currency === "EUR")
+		return '&#8364;';
+	else if (currency === "RUB")
+		return '&#8381;';
+	else if (currency === "GBP")
+		return '&#163;';
+}
 
 
 /***/ }),

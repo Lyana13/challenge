@@ -1,0 +1,13 @@
+body {
+	background-image: url("./img/fon.png");
+}
+
+.container {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	background-color: green;
+}
+.coin-name {
+	text-align: center;
+}
